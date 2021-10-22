@@ -21,7 +21,7 @@ proc admin_page(...)=
   try:
     ...
   except:
-    loggner.debug fmt"user {...} wanted to do ... but failed because of {getCurrentErrorMsg()}"
+    logger.debug fmt"user {...} wanted to do ... but failed because of {getCurrentErrorMsg()}"
 
 ```
 
