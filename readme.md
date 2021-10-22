@@ -25,15 +25,15 @@ proc admin_page(...)=
 
 ```
 
-as you can see, there maybe a lot of line that *just logs* what happens in the system, this might distract you from the actual logic.
+as you can see, there may be a lot of lines that *just logs* what happens in the system, this might distract you from the **actual logic**.
 
-what if you could comment that lines of codes [well the point is the commented codes become less distractive thanks to the syntax-highlighting], and more focus on the actual logic?
+what if you could **comment** that lines of codes [*well the point is the commented codes become less distractive, thanks to the syntax-highlighting*], and more focus on the **actual logic**?
 
-well thanks to the powerful macro system [and me 😎] you can do this!
+well thanks to the powerful macro system [and me ofcourse 😎] you can do this!
 
 
 ## Usage
-NOTE: use `##` with prefix and not `#`
+NOTE: use `##` and not `#` for target comments
 
 ### static prefix
 - usage: `{.uncomment.}`
@@ -54,7 +54,7 @@ proc your_Very_Special_Proc(...){.uncomment.}=
 - usage: `{.uncommentWith: "...".}`
 
 ```nim
-proc your_Very_Special_Proc(...){.uncommentWith: "!!".}=
+proc your_Very_Special_Proc(...){.uncommentWith: "!! ".}=
   ## !! echo "hey!"
   ...
   ## >> echo "won't be uncommented"
