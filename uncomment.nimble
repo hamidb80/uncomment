@@ -2,7 +2,7 @@
 
 version       = "0.0.1"
 author        = "hamidb80"
-description   = "comment the codes that you don't wanna see"
+description   = "uncomment the codes at the compile time"
 license       = "MIT"
 srcDir        = "src"
 
