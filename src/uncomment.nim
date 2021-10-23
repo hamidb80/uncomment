@@ -6,15 +6,12 @@ proc unCommentResolver(prefix: string, body: NimNode) =
   for i, node in body.pairs:
     if node.kind == nnkCommentStmt:
       let codes = node.strval.splitLines().mapIt it.strip
-      var firstTime = true
+      body[i] = newstmtlist()
 
       for code in codes:
-        if code.startswith prefix:
-          if firstTime:
-            body[i] = newstmtlist()
-            firstTime = false
-            
-          body[i].add parsestmt code[prefix.len..^1]
+        body[i].add:
+          if code.startswith prefix: parsestmt code[prefix.len..^1]
+          else: newCommentStmtNode(code)
 
     elif body.len > 0:
       unCommentResolver prefix, node
