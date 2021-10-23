@@ -1,4 +1,4 @@
-import unittest
+import unittest, macros, strutils
 import uncomment
 
 proc nested(res: var seq[string]){.uncomment.}=
@@ -15,12 +15,15 @@ proc nested(res: var seq[string]){.uncomment.}=
   ## !! res.add "AMAZING"
 
 proc multiline(res: var seq[string]){.uncomment.} =
-  ## >> res.add "No ..."
-  ## !! res.add "Yay"
-  ## !! res.add "it works"
-  ## >> res.add "Not again"
-  ## !! res.add "end"
+  ## >> add(res, "No ...")
+  ## !! add(res, "Yay")
+  ## !! add(res, "it works")
+  ## >> add(res, "Not again")
+  ## !! add(res, "end")
 
+# ------------------------------
+macro getBodyRepr(p: typed): untyped=
+  return newStrLitNode repr p.getImpl[^1]
 
 test "mulitline":
   var stemp: seq[string]
@@ -42,3 +45,11 @@ test "nested":
     "even nested",
     "AMAZING",
   ]
+
+  check getBodyRepr(multiline).strip == """
+  ## >> add(res, "No ...")
+  add(res, "Yay")
+  add(res, "it works")
+  ## >> add(res, "Not again")
+  add(res, "end")
+  """.unindent(2).strip
