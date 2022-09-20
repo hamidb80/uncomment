@@ -1,6 +1,8 @@
 import macros, strutils, sequtils
 
-const uncommentPrefix {.strdefine.} = ">> "
+const
+  uncommentPrefix {.strdefine.} = ">> "
+  uncommentPrefixDebug {.used.} = "?? "
 
 proc unCommentResolver(prefix: string, body: NimNode) =
   for i, node in body.pairs:
@@ -10,8 +12,13 @@ proc unCommentResolver(prefix: string, body: NimNode) =
 
       for code in codes:
         body[i].add:
-          if code.startswith prefix: parsestmt code[prefix.len..^1]
-          else: newCommentStmtNode(code)
+          when not defined(release) and not defined(danger):
+            if (code.startswith prefix) or (code.startswith uncommentPrefixDebug):
+              parsestmt code[prefix.len..^1]
+            else: newCommentStmtNode(code)
+          else:
+            if code.startswith prefix: parsestmt code[prefix.len..^1]
+            else: newCommentStmtNode(code)
 
     elif body.len > 0:
       unCommentResolver prefix, node

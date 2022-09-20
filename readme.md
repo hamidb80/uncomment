@@ -60,3 +60,14 @@ proc your_Very_Special_Proc(...){.uncommentWith: "!! ".}=
   ## >> echo "won't be uncommented"
 
 ```
+### ?? prefix for debug builds
+When the `??` prefix is used, the operators
+will not be uncommented in **release** and **danger** builds.
+Don't use it as an argument to the `uncommentWith` pragma.
+```nim
+proc your_proc_with_release_flag(...) =
+  ## >> echo "hey!"
+  ...
+  ## ?? echo "won't be uncommented"
+
+```
