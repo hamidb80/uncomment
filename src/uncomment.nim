@@ -1,4 +1,4 @@
-import macros, strutils, sequtils
+import macros, strutils
 
 const
   uncommentPrefix {.strdefine.} = ">> "
@@ -7,17 +7,23 @@ const
 proc unCommentResolver(prefix: string, body: NimNode) =
   for i, node in body.pairs:
     if node.kind == nnkCommentStmt:
-      let codes = node.strval.splitLines().mapIt it.strip
       body[i] = newstmtlist()
 
-      for code in codes:
+      for text in node.strval.splitLines:
+        let
+          code = strip text
+          a = code.startswith prefix
+          b = code.startswith uncommentPrefixDebug
+
         body[i].add:
           when not defined(release) and not defined(danger):
-            if (code.startswith prefix) or (code.startswith uncommentPrefixDebug):
+            if a or b:
               parsestmt code[prefix.len..^1]
-            else: newCommentStmtNode(code)
+            else:
+              newCommentStmtNode(code)
+
           else:
-            if code.startswith prefix: parsestmt code[prefix.len..^1]
+            if a: parsestmt code[prefix.len..^1]
             else: newCommentStmtNode(code)
 
     elif body.len > 0:
