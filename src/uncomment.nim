@@ -12,18 +12,17 @@ proc unCommentResolver(prefix: string, body: NimNode) =
       for text in node.strval.splitLines:
         let
           code = strip text
-          a = code.startswith prefix
-          b = code.startswith uncommentPrefixDebug
+          cond = code.startswith prefix
 
         body[i].add:
           when not defined(release) and not defined(danger):
-            if a or b:
+            if cond or code.startswith uncommentPrefixDebug:
               parsestmt code[prefix.len..^1]
             else:
               newCommentStmtNode(code)
 
           else:
-            if a: parsestmt code[prefix.len..^1]
+            if cond: parsestmt code[prefix.len..^1]
             else: newCommentStmtNode(code)
 
     elif body.len > 0:
