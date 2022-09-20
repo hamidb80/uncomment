@@ -28,10 +28,10 @@ proc unCommentResolver(prefix: string, body: NimNode) =
     elif body.len > 0:
       unCommentResolver prefix, node
 
-macro uncomment*(body: untyped) =
+macro uncomment*(body: untyped): untyped =
   unCommentResolver uncommentPrefix, body
-  return body
+  body
 
-macro uncommentWith*(prefix: static[string], body: untyped) =
+macro uncommentWith*(prefix: static[string], body: untyped): untyped =
   unCommentResolver prefix, body
-  return body
+  body
